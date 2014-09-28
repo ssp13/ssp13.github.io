@@ -117,7 +117,9 @@ and open the template in the editor.
                     displayOverlay = true;
                     var filter="&ImageFilters=%27Face%3AFace%27";
                     
-                   var url = "https://api.datamarket.azure.com/Bing/Search/v1/Image?Query=%27athens%20during%20%0A"+year+"%27&ImageFilters=%27Face%3AFace%27";
+                  var query=encodeURI("αθηνα");
+                    console.log(query);
+                   var url = "https://api.datamarket.azure.com/Bing/Search/v1/Image?Query=%27"+query+"%20%0A"+year+"%27";
                         
         $.ajax({
                         type: 'POST',
