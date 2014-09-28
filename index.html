@@ -14,65 +14,18 @@ and open the template in the editor.
         <!-- MEGAFOLIO PRO GALLERY JS FILES -->
         <script type="text/javascript" src="js/jquery.themepunch.plugins.min.js"></script>
         <script type="text/javascript" src="js/jquery.themepunch.megafoliopro.js"></script>
-        <link href='http://fonts.googleapis.com/css?family=Gloria+Hallelujah' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
         <script src="app.js"></script>
-        <title>χρονομηχανή</title>
+        <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-	input[type='range'] {
-		-webkit-appearance: none;
-		border-radius: 5px;
-		box-shadow: inset 0 0 5px #333;
-		background-color: #999;
-		height: 15px;
-                width:250px;
-		vertical-align: middle;
-	}
-	input[type='range']::-moz-range-track {
-		-moz-appearance: none;
-		border-radius: 5px;
-		box-shadow: inset 0 0 5px #333;
-		background-color: #999;
-		height: 10px;
-	}
-	input[type='range']::-webkit-slider-thumb {
-		-webkit-appearance: none !important;
-		border-radius: 20px;
-		background-color: #FFF;
-		box-shadow:inset 0 0 10px rgba(000,000,000,0.5);
-		border: 1px solid #999;
-		height: 20px;
-		width: 20px;
-	}
-	input[type='range']::-moz-range-thumb {
-		-moz-appearance: none;
-		border-radius: 20px;
-		background-color: #FFF;
-		box-shadow:inset 0 0 10px rgba(000,000,000,0.5);
-		border: 1px solid #999;
-		height: 20px;
-		width: 20px;
-	}
-</style>
     </head>
     <body >
         <div class="ajax-loading" style="display:none;"><div></div></div>
         <br>
-        <div class="container">  
-            <h1 style="margin-left:-800px">χρονομηχανή</h1>
-               <div class="row">
-                 <label class="year">Year</label>
-            </div>
-            <br>
-            <div id="range" style="top:100px">
-                 1930<input type="range" id='year' min="1930" max="2004">2004
-            </div>
-           
-            <br>
-        
-            
+        <div class="container">            
+            <input type="range" id='year' min="1930" max="2014">
+            <label id='label'></label>
             <div class="megafolio-container">
 
 
@@ -84,13 +37,9 @@ and open the template in the editor.
         <button id='1'>button</button>
 
         <script type="text/javascript">
-            var goto=function(link){
-                
-                console.log(link)
-            }
             jQuery(document).ready(function() {
 
-//$(".year").text(2014);
+
 
                 var displayOverlay = false;
 
@@ -115,11 +64,8 @@ and open the template in the editor.
 
                 function bing(year) {
                     displayOverlay = true;
-                    var filter="&ImageFilters=%27Face%3AFace%27";
-                    
-                    var url = "https://api.datamarket.azure.com/Bing/Search/v1/Image?Query=%27%CE%B1%CE%B8%CE%B7%CE%BD%CE%B1%20"+year+"%27";
-                        
-        $.ajax({
+                    var url = "https://api.datamarket.azure.com/Bing/Search/v1/Image?Query=%27athens%27%27" + year + "%27";
+                    $.ajax({
                         type: 'POST',
                         url: url,
                         dataType: "json",
@@ -138,7 +84,7 @@ and open the template in the editor.
                         img: 'http://i.imgur.com/qkKy8.gif'
                     };
                     displayOverlay = true;
-                    
+                    console.log(year);
                     //Get Data From Instagram
                     $.ajax({
                         type: "GET",
@@ -149,16 +95,16 @@ and open the template in the editor.
                     }).done(function(photos) {
                         console.log(photos);
 
-                        
+                        if (change) {
+                            $('.megafolio-container').html("");
+                            $('.megafolio-container').append('<div><img src="http://i.imgur.com/qkKy8.gif"></div>');
+                        }
                         //putData(photos.data);
                     })
                 }
 
                 var putPhotos = function(photos) {
-                        if (change) {
-                            $('.megafolio-container').html("");
-                            $('.megafolio-container').append('<div><img src="http://i.imgur.com/qkKy8.gif"></div>');
-                        }
+
                     for (i = 0; i < photos.length; i++) {
 
                         // var img = photos[i].images.low_resolution.url;
@@ -173,31 +119,26 @@ and open the template in the editor.
                         var img = photos[i].MediaUrl;
                         var id = photos[i].id;
 
-                        $('.megafolio-container').append("<div class='mega-entry' data-src='" + img + "' onclick='goto(\""+img+"\")'></div>");
+                        $('.megafolio-container').append("<div class='mega-entry' data-src='" + img + "'  ></div>");
 
                     }
-                    
                     var api = jQuery('.megafolio-container').megafoliopro({});
                     api.megaremix([0]);
                 };
 
 
-                $("input[type=range]").on('input', function() {
-                    $(".year").text($(this).val());
-                    
-                    
-                    //loadInstagram($(this).val());
-                    
+                $("input[type=range]").on('change', function() {
+                    console.log($(this).val());
+                    change = true;
+                    loadInstagram($(this).val());
+                    bing($(this).val());
                     $('#label').val($(this).val());
 
                 });
-                $("input[type=range]").on('change', function() {
-                    change = true;
-                    console.log($(this).val());
-                    bing($(this).val());
-                    });
 
-               // loadInstagram(2014);
+
+
+                loadInstagram(2014);
 
 
             });
