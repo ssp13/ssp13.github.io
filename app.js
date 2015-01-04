@@ -212,7 +212,7 @@ app.controller('MainCtrl', function($scope, $http) {
       if(searchEngine==="google"){
     getResults(q);
       }else if(searchEngine==="bing"){
-          alert()
+          alert();
       }
   };
   

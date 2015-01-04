@@ -29,28 +29,30 @@ jQuery(document).ready(function() {
     var min = ""
     var change = false;
 
-    // function bing(year) {
-    //   var filter = "&ImageFilters=%27Face%3AFace%27";
-    //   var query = encodeURI("αθηνα");
-    //   var url = "https://api.datamarket.azure.com/Bing/Search/v1/Image?Query=%27" + query + "%20%0A" + year + "%27";
+     function bing(year) {
+       var filter = "&ImageFilters=%27Face%3AFace%27";
+       var query = encodeURI("αθηνα");
+       var url = "https://api.datamarket.azure.com/Bing/Search/v1/Image?Query=%27" + query + "%20%0A" + year + "%27";
 
-    //   var target = document.getElementById('foo');
-    //   var spinner = new Spinner(opts).spin(target);
-    //   $('.megafolio-container').hide();
-    //   $.ajax({
-    //     type: 'POST',
-    //     url: url,
-    //     dataType: "json",
-    //     headers: {
-    //       "Authorization": "Basic OmpKYlNud2FXK2VIcVZnQXhrZzJoMHgyaEp6U0MwOWxqMHFJRG9BbW9jaVE="
-    //     }
-    //   }).done(function(data) {
+       var target = document.getElementById('foo');
+       var spinner = new Spinner(opts).spin(target);
+       
+       $.ajax({
+         type: 'POST',
+         url: url,
+         dataType: "json",
+         headers: {
+           "Authorization": "Basic OmpKYlNud2FXK2VIcVZnQXhrZzJoMHgyaEp6U0MwOWxqMHFJRG9BbW9jaVE="
+         }
+       }).done(function(data) {
 
-    //     putPhotos(data.d.results);
-    //     spinner.stop();
-
-    //   });
-    // }
+         putPhotos(data.d.results);
+         spinner.stop();
+ var api = jQuery('.megafolio-container').megafoliopro({});
+      api.megaremix([0]);
+       $('.megafolio-container').show();
+       });
+     }
 
     //bing(2014);
 
@@ -75,20 +77,29 @@ jQuery(document).ready(function() {
     //     })
     // }
 
-    // var putPhotos = function(photos) {
-    //   if (change) {
-    //     $('.megafolio-container').html("");
-    //   }
-    //   for (i = 0; i < photos.length; i++) {
-    //     // var img = photos[i].images.low_resolution.url;
-    //     var img = photos[i].MediaUrl;
-    //     var id = photos[i].id;
-    //     $('.megafolio-container').append("<div class='mega-entry' data-src='" + img + "' onclick='goto(\"" + img + "\")'></div>");
-    //   }
-    //   var api = jQuery('.megafolio-container').megafoliopro({});
-    //   api.megaremix([0]);
-    //   $('.megafolio-container').show();
-    // };
+     var putPhotos = function(photos) {
+       if (change) {
+         $('.megafolio-container').html("");
+       }
+       for (i = 0; i < photos.length; i++) {
+         // var img = photos[i].images.low_resolution.url;
+         var img = photos[i].MediaUrl;
+         var id = photos[i].id;
+$('.megafolio-container').append('<div class="mega-entry cat-all cat-one" id="mega-entry-'+i+'" data-src="' + img + '" data-width="504" data-height="400">'+
+    '<div class="mega-hover">'+
+    '<div class="mega-hovertitle">'+ photos[i].Title +'<div class="mega-hoversubtitle">JUST A PERFECT START</div></div>'
+    +'<a href="#"><div class="mega-hoverlink"></div></a><a class="fancybox" rel="group" href="' + photos[i].Title+ '" ><div class="mega-hoverview"></div></a>'+
+    '<div class="fatcaption-bottom">'+ photos[i].Title +'</div></div></div>')       
+     }
+     jQuery(".fancybox").fancybox({
+     openEffect  : 'none',
+     closeEffect : 'none',
+     helpers : {
+                 media : {}
+                }
+});     }
+    
+     
 
     // $("input[type=range]").on('input', function(e) {
     //   e.preventDefault();
@@ -99,11 +110,11 @@ jQuery(document).ready(function() {
     //   //loadInstagram($(this).val());
     // });
 
-    // $("input[type=range]").on('click', function(e) {
-    //   e.preventDefault();
-    //   change = true;
-    //   bing($(this).val());
-    // });
+     $("input[type=range]").on('click', function(e) {
+       e.preventDefault();
+       change = true;
+       bing($(this).val());
+     });
 
     // loadInstagram(2014);
 
@@ -178,6 +189,7 @@ app.controller('MainCtrl', function($scope, $http) {
                     //$scope.results = data.items;
 
                     mega.megaremix([1]);
+                    
 jQuery(".fancybox").fancybox({
      openEffect  : 'none',
      closeEffect : 'none',
@@ -194,32 +206,35 @@ jQuery(".fancybox").fancybox({
 
 
 
-    var searchEngine = "";
+    $scope.searchEngine = "";
 
 
-    $scope.$watch('searchOption', function(newValue) {
-        if (newValue === "microsoft") {
-            searchEngine = "google"
-        } else if (newValue === "google") {
-            searchEngine = "google"
+//    $scope.$watch('searchOption', function(newValue) {
+//        if (newValue === "bing") {
+//            searchEngine = "bing"
+//        } else if (newValue === "google") {
+//            searchEngine = "google"
+//
+//        }
+//    });
 
-        }
-    });
-
-    $scope.getResults = function() {
-        getResults(query);
-    };
-
-    $scope.$watch('yearRange', function(newValue, oldValue) {
-
-        if (newValue != oldValue) {
-            query = "αθηνα" + " " + newValue;
-            console.log(query);
-            var q = encodeURI(query);
-            getResults(q, 1);
-
-        }
-    });
+    $scope.getResults = function(q) {
+      if($scope.searchEngine==="google"){
+    getResults(q,1);
+      }else if($scope.searchEngine==="bing"){
+          return;
+      }
+  };
+  
+  $scope.$watch('yearRange', function(newValue, oldValue) {
+  
+   if (newValue != oldValue) {
+      query = "αθηνα" + " " + newValue;
+      console.log(query);
+      var q=encodeURI(query);
+      $scope.getResults(q);
+    }
+  });
 
     $scope.bings = [];
     // $http({
@@ -233,18 +248,18 @@ jQuery(".fancybox").fancybox({
     //   $scope.bings=data.d.results;
     // })
 
-    function bing(year) {
-        var url = "https://api.datamarket.azure.com/Bing/Search/v1/Image?Query=%27athens%27%27" + year + "%27";
-        $.ajax({
-            type: 'POST',
-            url: url,
-            dataType: "json",
-            headers: {
-                "Authorization": "Basic OmpKYlNud2FXK2VIcVZnQXhrZzJoMHgyaEp6U0MwOWxqMHFJRG9BbW9jaVE="
-            }
-        }).done(function(data) {
-        });
-    }
+//    function bing(year) {
+//        var url = "https://api.datamarket.azure.com/Bing/Search/v1/Image?Query=%27athens%27%27" + year + "%27";
+//        $.ajax({
+//            type: 'POST',
+//            url: url,
+//            dataType: "json",
+//            headers: {
+//                "Authorization": "Basic OmpKYlNud2FXK2VIcVZnQXhrZzJoMHgyaEp6U0MwOWxqMHFJRG9BbW9jaVE="
+//            }
+//        }).done(function(data) {
+//        });
+//    }
     //  bing(2014);
 
 });
