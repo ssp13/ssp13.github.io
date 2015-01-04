@@ -158,10 +158,10 @@ app.controller('MainCtrl', function($scope, $http) {
                     console.log(data);
                     var items = [];
                     mega = jQuery('.megafolio-container').megafoliopro({});
-                                $('.megafolio-container').html("");
+                              
 
                     //   
-                    
+                      $('.megafolio-container').html("");
                     angular.forEach(data.items, function(item) {
                         console.log(data);
                         // $('.megafolio-container').append("<div class='mega-entry' data-src='" + item.link + "' onclick='goto(\"" + img + "\")'></div>");
